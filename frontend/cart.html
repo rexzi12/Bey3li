@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>عربة التسوق | Bey3li</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="navbar"></div>
+
+
+<div id="modalloginContent"></div>
+
+  <!-- هنا سيتم تحميل المودال -->
+  <div id="modalContent"></div>
+
+<div class="container my-5">
+  <h1 class="text-center mb-5">🛒 عربة التسوق</h1>
+
+  <div class="row">
+    <div class="col-lg-8" id="cart-items-container">
+      <!-- المنتجات ستضاف هنا ديناميكياً -->
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title mb-4">ملخص الطلب</h4>
+          <ul class="list-unstyled">
+            <li class="d-flex justify-content-between mb-2">
+              <span>مجموع المنتجات:</span>
+              <span id="product-total">0 دج</span>
+            </li>
+            <li class="d-flex justify-content-between mb-2">
+              <span>الشحن:</span>
+              <span id="shipping-cost" class="text-muted">اختر الولاية</span>
+            </li>
+          </ul>
+          <hr>
+          <div class="d-flex justify-content-between fw-bold mb-4">
+            <span>الإجمالي:</span>
+            <span id="total-cost">0 دج</span>
+          </div>
+
+          <div id="alert-container"></div>
+
+          <button class="btn btn-primary w-100 mb-3" id="toggle-form-btn">إتمام الطلب</button>
+
+          <div id="order-form-container" style="display: none;">
+            <h5 class="mb-3">تفاصيل العميل</h5>
+            <form id="order-form">
+              <div class="mb-3">
+                <label for="full-name" class="form-label">الاسم الكامل</label>
+                <input type="text" class="form-control" id="full-name" required>
+              </div>
+              <div class="mb-3">
+                <label for="phone-number" class="form-label">رقم الهاتف</label>
+                <input type="tel" class="form-control" id="phone-number" required>
+              </div>
+              <div class="mb-3">
+                <label for="state" class="form-label">الولاية</label>
+                <select class="form-select" id="state" required>
+                  <option value="">اختر الولاية</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="address" class="form-label">العنوان</label>
+                <input type="text" class="form-control" id="address" required>
+              </div>
+              <button type="submit" class="btn btn-success w-100">تأكيد الطلب</button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="footer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+let products = []; // 1. تعريف مسبق
+
+// 2. تحميل المنتجات
+fetch('../database/products.json')
+  .then(response => response.json())
+  .then(data => {
+    products = data;
+    renderProducts(products);
+
+    setupSearch(); // 3. استدعاء البحث بعد تحميل المنتجات
+  })
+  .catch(error => console.error('خطأ في تحميل المنتجات:', error));
+
+  // تحميل النافبار
+  fetch('navbar.html')
+  .then(response => response.text())
+  .then(data => {
+    document.getElementById('navbar').innerHTML = data;
+
+    updateCartCount(); // تبقي كما هي
+    setupSearch(); // إعداد البحث بعد تحميل النافبار
+
+    // استدعاء المودال بعد تحميل النافبار
+    loadModal();
+    loadLoginModal();
+  });
+
+
+// دالة لتحميل مودال تسجيل الدخول مع تفعيل زر تسجيل الدخول
+function loadLoginModal() {
+  fetch('login_modal.html')
+    .then(response => response.text())
+    .then(data => {
+      const modalContainer = document.getElementById('modalloginContent');
+      if (modalContainer) {
+        modalContainer.innerHTML += data;
+
+        // بعد إضافة المودال بنجاح، نفعل سكريبت تسجيل الدخول
+        const loginForm = document.getElementById('loginForm');
+
+        if (loginForm) {
+          loginForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+
+            if (!email || !password) {
+              alert('يرجى ملء جميع الحقول');
+              return;
+            }
+
+            // هنا تضيف كود الإرسال إلى الخادم مثلاً
+            alert('تم تسجيل الدخول بنجاح!');
+          });
+        }
+      }
+    })
+    .catch(error => {
+      console.error('Error loading login modal:', error);
+    });
+}
+
+
+function loadModal() {
+  fetch('register_modal.html')
+    .then(response => response.text())
+    .then(data => {
+      // تحديد مكان المودال
+      const modalContainer = document.getElementById('modalContent');
+      if (modalContainer) {
+        modalContainer.innerHTML = data;
+
+        // إضافة الأحداث للأزرار بعد تحميل المحتوى
+        const chooseMarketerBtn = document.getElementById('chooseMarketer');
+        const chooseMerchantBtn = document.getElementById('chooseMerchant');
+        const backToStep1Btn = document.getElementById('backToStep1');
+
+        // عند الضغط على زر "مسوق"
+        if (chooseMarketerBtn) {
+          chooseMarketerBtn.addEventListener('click', function () {
+            document.getElementById('storeNameField').style.display = 'none';
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step2').style.display = 'block';
+          });
+        }
+
+        // عند الضغط على زر "تاجر"
+        if (chooseMerchantBtn) {
+          chooseMerchantBtn.addEventListener('click', function () {
+            document.getElementById('storeNameField').style.display = 'block';
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step2').style.display = 'block';
+          });
+        }
+
+        // عند الضغط على زر "رجوع إلى الخطوة 1"
+        if (backToStep1Btn) {
+          backToStep1Btn.addEventListener('click', function () {
+            document.getElementById('step2').style.display = 'none';
+            document.getElementById('step1').style.display = 'block';
+          });
+        }
+      }
+    })
+    .catch(error => {
+      console.error('Error loading the modal:', error);
+    });
+}
+
+ function setupSearch() {
+    const searchInput = document.querySelector('input[type="search"]');
+    
+    if (!searchInput) {
+      console.error('حقل البحث غير موجود');
+      return;
+    }
+  
+    // إنشاء صندوق للنتائج إن لم يكن موجود
+    let resultsContainer = document.getElementById('search-results');
+    if (!resultsContainer) {
+      resultsContainer = document.createElement('div');
+      resultsContainer.id = 'search-results';
+      resultsContainer.style.position = 'absolute';
+      resultsContainer.style.backgroundColor = '#fff';
+      resultsContainer.style.width = '100%';
+      resultsContainer.style.zIndex = '1000';
+      resultsContainer.style.border = '1px solid #ccc';
+      resultsContainer.style.borderRadius = '5px';
+      resultsContainer.style.maxHeight = '300px';
+      resultsContainer.style.overflowY = 'auto';
+      resultsContainer.style.top = '100%'; 
+      resultsContainer.style.right = '0'; 
+      resultsContainer.style.left = '0';
+      resultsContainer.style.padding = '5px';
+      resultsContainer.style.display = 'none'; 
+      searchInput.parentElement.appendChild(resultsContainer);
+    }
+  
+    searchInput.addEventListener('input', function() {
+      const query = this.value.trim().toLowerCase();
+      resultsContainer.innerHTML = '';
+  
+      if (query.length === 0) {
+        resultsContainer.style.display = 'none';
+        return;
+      }
+  
+      const filteredProducts = products.filter(product =>
+        product.name.toLowerCase().includes(query)
+      );
+  
+      if (filteredProducts.length === 0) {
+        resultsContainer.innerHTML = '<div class="p-2 text-muted">لا توجد منتجات مطابقة</div>';
+      } else {
+        filteredProducts.forEach(product => {
+          const item = document.createElement('div');
+          item.classList.add('d-flex', 'align-items-center', 'p-2', 'search-result-item');
+          item.style.cursor = 'pointer';
+          item.style.borderBottom = '1px solid #eee';
+  
+          item.innerHTML = `
+            <img src="${product.image}" alt="${product.name}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 5px; margin-left: 10px;">
+            <div>
+              <div class="fw-bold">${product.name}</div>
+              <div class="text-muted" style="font-size: 0.8em;">${product.description.substring(0, 40)}...</div>
+            </div>
+          `;
+  
+          item.addEventListener('click', function() {
+            redirectToProductDetails(product.id, product.name, product.price, product.image, product.description);
+          });
+  
+          resultsContainer.appendChild(item);
+        });
+      }
+  
+      resultsContainer.style.display = 'block';
+    });
+  
+    // إخفاء النتائج عند الضغط خارج البحث
+    document.addEventListener('click', function(event) {
+      if (!searchInput.contains(event.target) && !resultsContainer.contains(event.target)) {
+        resultsContainer.style.display = 'none';
+      }
+    });
+  }
+
+  // دالة لتحويل المستخدم إلى صفحة تفاصيل المنتج مع إرسال البيانات
+function redirectToProductDetails(productId, productName, productPrice, productImage, productDescription) {
+  // تخزين المنتج في localStorage قبل الانتقال إلى صفحة التفاصيل
+  const productDetails = {
+    id: productId,
+    name: productName,
+    price: productPrice,
+    image: productImage,
+    description: productDescription
+  };
+
+  localStorage.setItem('selectedProduct', JSON.stringify(productDetails));
+
+  // الانتقال إلى صفحة التفاصيل
+  window.location.href = 'product-details.html';
+}
+
+
+  // تحميل الفوتر
+  fetch('footer.html')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('footer').innerHTML = data;
+    });
+  
+  // دالة لتحديث رقم العربة
+  function updateCartCount() {
+    const cartCountElement = document.getElementById('cart-count');
+    if (!cartCountElement) {
+      console.error('لم يتم العثور على cart-count');
+      return;
+    }
+  
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  
+    cartCountElement.textContent = cart.length;
+  }
+  
+  // لما تكمل الصفحة تحميل بالكامل، حدث العداد (احتياط إضافي)
+  window.addEventListener('load', () => {
+    updateCartCount();
+  });
+
+
+  // جلب بيانات الشحن (الولايات) من ملف JSON
+  let shippingData = [];
+  fetch('../database/shipping.json')
+    .then(response => response.json())
+    .then(data => {
+      shippingData = data.states;
+      const stateSelect = document.getElementById('state');
+      shippingData.forEach(state => {
+        const option = document.createElement('option');
+        option.value = state.name;
+        option.textContent = state.name;
+        stateSelect.appendChild(option);
+      });
+    });
+// تحميل العربة من LocalStorage
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+
+
+
+// دالة لتحديث واجهة العربة
+function updateCartUI() {
+  const cartContainer = document.getElementById('cart-items-container');
+  cartContainer.innerHTML = '';
+
+  let totalPrice = 0;
+
+  cart.forEach(item => {
+    const cartItem = document.createElement('div');
+    cartItem.classList.add('cart-item', 'd-flex', 'justify-content-between', 'align-items-center', 'mb-4', 'p-3', 'border', 'rounded');
+    cartItem.innerHTML = `
+      <div class="d-flex">
+        <img src="${item.image}" alt="${item.name}" class="cart-item-image" style="width: 50px; height: 50px; object-fit: cover; margin-right: 15px;">
+        <div>
+          <h5>${item.name}</h5>
+          <p class="text-muted">${item.description || 'لا يوجد وصف للمنتج'}</p> <!-- عرض الوصف إذا كان موجودًا -->
+        </div>
+      </div>
+      <div>
+        <span class="fw-bold">${item.price} دج</span>
+        <span class="fw-bold">× ${item.quantity}</span>
+        <button class="btn btn-sm btn-outline-danger ms-3" onclick="removeFromCart(${item.id})">حذف</button>
+      </div>
+    `;
+    cartContainer.appendChild(cartItem);
+    totalPrice += item.price * item.quantity;
+  });
+
+  // تحديث إجمالي السعر
+  document.getElementById('product-total').textContent = `${totalPrice} دج`;
+
+  // تحديث تكلفة الشحن بناءً على الحالة المحددة
+  updateCosts(document.getElementById('state').value);
+
+  // إضافة زر لحذف جميع العناصر
+  const clearCartButton = document.createElement('button');
+  clearCartButton.classList.add('btn', 'btn-danger', 'w-100', 'mt-3');
+  clearCartButton.textContent = 'مسح جميع المنتجات';
+  clearCartButton.onclick = clearCart; // ربط الزر بالدالة لحذف جميع المنتجات
+  cartContainer.appendChild(clearCartButton);
+}
+
+// دالة لحذف جميع المنتجات من السلة
+function clearCart() {
+  // مسح السلة من localStorage
+  localStorage.removeItem('cart');
+
+  // تحديث العربة
+  updateCartUI();
+
+  // إظهار رسالة تنبيه للمستخدم
+  alert('تم مسح جميع المنتجات من السلة');
+
+    // إعادة تحميل الصفحة لتحديث الواجهة
+    location.reload();
+}
+
+
+
+
+function updateCosts(selectedState) {
+  const shippingCostElement = document.getElementById('shipping-cost');
+  const totalCostElement = document.getElementById('total-cost');
+  const cart = JSON.parse(localStorage.getItem('cart')) || []; // نقرأ السلة من localStorage
+
+  // تحقق من بيانات السلة
+  if (cart.length === 0) {
+    shippingCostElement.textContent = 'السلة فارغة';
+    totalCostElement.textContent = '0 دج';
+    return;
+  }
+
+  const productTotal = cart.reduce((sum, item) => {
+    // تحقق من أن item.price و item.quantity قيم صحيحة
+    if (typeof item.price === 'number' && typeof item.quantity === 'number') {
+      return sum + item.price * item.quantity;
+    } else {
+      console.error('بيانات غير صحيحة في السلة:', item);
+      return sum;
+    }
+  }, 0);
+
+  if (!selectedState) {
+    shippingCostElement.textContent = 'اختر الولاية';
+    shippingCostElement.classList.add('text-muted');
+    totalCostElement.textContent = productTotal + ' دج';
+    return;
+  }
+
+  const selected = shippingData.find(s => s.name === selectedState);
+  const shippingCost = selected ? selected.shippingCost : 0;
+  const finalTotal = productTotal + shippingCost;
+
+  shippingCostElement.textContent = shippingCost + ' دج';
+  shippingCostElement.classList.remove('text-muted');
+  totalCostElement.textContent = finalTotal + ' دج';
+}
+
+
+function removeFromCart(productId) {
+  const cart = JSON.parse(localStorage.getItem('cart')) || []; // نقرأ السلة من localStorage
+  const productIndex = cart.findIndex(item => item.id === productId); // نبحث مباشرة بالـ id
+  if (productIndex > -1) {
+    cart.splice(productIndex, 1); // نحذف المنتج
+    localStorage.setItem('cart', JSON.stringify(cart)); // نخزن التحديث
+    updateCartUI(); // نحدث واجهة المستخدم
+    location.reload(); // نعيد تحميل الصفحة
+  }
+}
+
+
+  // تحديث تكلفة الشحن عند تغيير الولاية
+  document.getElementById('state').addEventListener('change', function() {
+    updateCosts(this.value);
+  });
+
+  // دالة لعرض التنبيهات
+  function showAlert(message, type) {
+    const alertContainer = document.getElementById('alert-container');
+    alertContainer.innerHTML = `<div class="alert alert-${type} alert-dismissible fade show" role="alert">
+      ${message}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="إغلاق"></button>
+    </div>`;
+  }
+
+  // التعامل مع إرسال الطلب
+  document.getElementById('order-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const fullName = document.getElementById('full-name').value.trim();
+    const phoneNumber = document.getElementById('phone-number').value.trim();
+    const state = document.getElementById('state').value.trim();
+    const address = document.getElementById('address').value.trim();
+
+    if (!fullName || !phoneNumber || !state || !address) {
+        showAlert('❗ يرجى ملء جميع الحقول بشكل صحيح.', 'warning');
+        return;
+    }
+
+    showAlert('✅ تم تأكيد الطلب بنجاح!', 'success');
+    document.getElementById('order-form').reset();
+    toggleBtn.click();
+  });
+
+  // دالة للتبديل بين إظهار وإخفاء تفاصيل الطلب
+  const toggleBtn = document.getElementById('toggle-form-btn');
+  toggleBtn.addEventListener('click', function() {
+    const formContainer = document.getElementById('order-form-container');
+    if (formContainer.style.display === 'none') {
+      formContainer.style.display = 'block';
+      toggleBtn.textContent = 'إخفاء تفاصيل الطلب';
+    } else {
+      formContainer.style.display = 'none';
+      toggleBtn.textContent = 'إتمام الطلب';
+    }
+  });
+  // أول ما تفتح الصفحة، نعرض المنتجات اللي كانت محفوظة
+updateCartUI();
+
+
+</script>
+
+
+</body>
+</html>

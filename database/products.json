@@ -1,0 +1,35 @@
+[
+    {
+      "id": 1,
+      "name": "هاتف ذكي حديث",
+      "price": "35000 دج",
+      "image": "img/Hacf869d9197d4746acec6f222cc6d3e63.jpg",
+      "description": "هاتف ذكي بشاشة 6.5 إنش وذاكرة 128GB",
+      "category": "إلكترونيات"
+    },
+    {
+      "id": 2,
+      "name": "حاسوب محمول",
+      "price": "95000 دج",
+      "image": "img/article-aahiNaYZW5-U.webp",
+      "description": "حاسوب محمول عالي الأداء مع معالج i7 وذاكرة 16GB",
+      "category": "إلكترونيات"
+    },
+    {
+      "id": 3,
+      "name": "سماعات لاسلكية",
+      "price": "1200 دج",
+      "image": "img/2_4apy-3z.jpg",
+      "description": "سماعات بلوتوث بصوت نقي وعازل للضوضاء",
+      "category": "إلكترونيات"
+    },
+    {
+      "id": 4,
+      "name": "أحذية رياضية",
+      "price": "7000 دج",
+      "image": "img/yeezy-foam-runner.jpg.webp",
+      "description": "أحذية مريحة وعصرية للرياضة اليومية",
+      "category": "أحذية"
+    }
+  ]
+  

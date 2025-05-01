@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تفاصيل المنتج</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div id="navbar"></div>
+
+<div id="modalloginContent"></div>
+
+<!-- هنا سيتم تحميل المودال -->
+<div id="modalContent"></div>
+
+<div id="modal-container"></div>
+
+  <div class="container mt-5">
+    <div class="row g-5 align-items-start">
+      <div class="col-md-6 text-center">
+        <img id="productImage" class="img-fluid rounded-3 shadow-sm" alt="صورة المنتج" style="max-height:500px;">
+      </div>
+      <div class="col-md-6">
+        <h2 id="productName" class="fw-bold mb-3"></h2>
+        <div class="mb-3">
+          <span id="productPrice" class="text-danger fs-3 fw-bold me-2"></span>
+          <span id="oldPrice" class="text-muted text-decoration-line-through"></span>
+        </div>
+        <div class="mb-3">
+          <span class="text-warning">
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-half"></i>
+          </span>
+          <span class="text-muted">(120 مراجعة)</span>
+        </div>
+        <p id="productDescription" class="text-secondary mb-4"></p>
+
+        <div class="mb-3 text-start">
+          <div class="d-flex align-items-center mb-3" style="width: 140px;">
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="decreaseQuantity()">-</button>
+            <input type="text" id="modalProductQuantitySecondary" value="1" class="form-control text-center border-0" style="width: 50px;" readonly>
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="increaseQuantity()">+</button>
+          </div>
+        </div>
+        
+        
+        <div class="d-flex gap-2 mb-3">
+          <button id="addToCartButton" class="btn btn-primary flex-fill">
+            <i class="ri-shopping-cart-2-line"></i> إضافة إلى السلة
+          </button>
+         <!-- زر شراء الآن -->
+<button class="btn btn-success flex-fill" data-bs-toggle="modal" data-bs-target="#orderModal">
+  <i class="ri-flashlight-line"></i> شراء الآن
+</button>
+        </div>
+        
+        
+        
+
+        <ul class="list-unstyled">
+          <li><i class="ri-truck-line text-success"></i> شحن حسب الولاية</li>
+          <li><i class="ri-shield-check-line text-success"></i> الضمان و الجودة</li>
+          <li><i class="ri-arrow-go-back-line text-success"></i> سياسة إرجاع خلال 7 ايام</li>
+        </ul>
+      </div>
+    </div>
+
+    <hr class="my-5">
+
+    <div id="reviews">
+      <h3 class="mb-4">تقييمات العملاء</h3>
+      <div id="reviewsList" class="list-group"></div>
+    </div>
+
+  </div>
+
+  <div id="footer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/product_details.js"></script>
+
+  <script>
+    // تحميل مودل الطلب
+    let shippingData = [];
+    let productTotalWithoutShipping = 0; // نحتفظ بالسعر بدون شحن هنا
+  
+    fetch('order-modal.html')
+      .then(response => response.text())
+      .then(html => {
+        document.getElementById('modal-container').innerHTML = html;
+  
+        // بعد تحميل المودل - اربط الأحداث
+        initializeModalFunctions();
+
+      });
+
+      
+  
+    function initializeModalFunctions() {
+      // تحميل بيانات الولايات
+      fetch('../database/shipping.json')
+        .then(response => response.json())
+        .then(data => {
+          shippingData = data.states;
+          const stateSelect = document.getElementById('state');
+          
+          shippingData.forEach(state => {
+            const option = document.createElement('option');
+            option.value = state.name;
+            option.textContent = state.name;
+            stateSelect.appendChild(option);
+          });
+  
+          if (stateSelect) {
+            stateSelect.addEventListener('change', () => {
+              updateTotalWithShipping(); 
+              // عند تغيير الولاية نضيف الشحن
+            });
+          }
+  
+          // تحميل السعر أول مرة بعد تحميل الولايات
+          updateProductPriceOnly();
+        });
+  
+      const toggleBtn = document.getElementById('toggle-form-btn');
+      const formContainer = document.getElementById('order-form-container');
+  
+      if (toggleBtn && formContainer) {
+        toggleBtn.addEventListener('click', () => {
+          formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
+        });
+      }
+  
+      const quantityInput = document.getElementById('modalProductQuantitySecondary');
+  
+      if (quantityInput) {
+        quantityInput.addEventListener('input', () => {
+          updateProductPriceOnly(); // عند تغيير الكمية نحدث السعر بدون شحن
+        });
+      }
+    }
+  
+    function updateProductPriceOnly() {
+      const basePriceElement = document.getElementById('base-price');
+      const totalCostElement = document.getElementById('total-cost');
+  
+      const selectedProduct = JSON.parse(localStorage.getItem('selectedProduct'));
+      const quantityInput = document.getElementById('modalProductQuantitySecondary');
+      const quantity = parseInt(quantityInput?.value) || 1; // الكمية 1 افتراضيًا
+  
+      if (!selectedProduct) {
+        basePriceElement.textContent = 'لا يوجد منتج';
+        totalCostElement.textContent = '0 دج';
+        return;
+      }
+  
+      const pricePerUnit = typeof selectedProduct.price === 'number' ? selectedProduct.price : parseFloat(selectedProduct.price);
+  
+      productTotalWithoutShipping = pricePerUnit * quantity; // نخزن النتيجة
+  
+      if (basePriceElement) {
+        basePriceElement.textContent = formatPrice(productTotalWithoutShipping) + ' دج';
+      }
+  
+      if (totalCostElement) {
+        totalCostElement.textContent = formatPrice(productTotalWithoutShipping) + ' دج'; // بدون شحن مبدئياً
+      }
+    }
+  
+    function updateTotalWithShipping() {
+      const shippingCostElement = document.getElementById('shipping-cost');
+      const totalCostElement = document.getElementById('total-cost');
+      const selectedState = document.getElementById('state')?.value;
+  
+      let shippingCost = 0;
+  
+      if (selectedState) {
+        const selected = shippingData.find(s => s.name === selectedState);
+        shippingCost = selected ? selected.shippingCost : 0;
+      }
+  
+      if (shippingCostElement) {
+        shippingCostElement.textContent = formatPrice(shippingCost) + ' دج';
+      }
+  
+      const finalTotal = productTotalWithoutShipping + shippingCost;
+  
+      if (totalCostElement) {
+        totalCostElement.textContent = formatPrice(finalTotal) + ' دج';
+      }
+    }
+  
+    // تنسيق السعر بإضافة فواصل الآلاف
+    function formatPrice(price) {
+      return price.toLocaleString('ar-DZ');
+    }
+  </script>
+</body>
+</html>

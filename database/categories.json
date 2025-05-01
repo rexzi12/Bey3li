@@ -1,0 +1,39 @@
+{
+    "categories": [
+      {
+        "name": "إلكترونيات",
+        "icon": "ri-computer-line"
+      },
+      {
+        "name": "ملابس رجالية",
+        "icon": "ri-t-shirt-line"
+      },
+      {
+        "name": "ملابس نسائية",
+        "icon": "ri-women-line"
+      },
+      {
+        "name": "أحذية",
+        "icon": "ri-footprint-line"
+      },
+      {
+        "name": "ساعات وإكسسوارات",
+        "icon": "ri-time-line"
+      },
+      {
+        "name": "منتجات منزلية",
+        "icon": "ri-home-4-line"
+      },
+      {
+        "name": "مستلزمات رياضية",
+        "icon": "ri-basketball-line"
+      },
+      {
+        "name": "منتجات الأطفال",
+        "icon": "ri-bear-smile-line"
+      }
+    ]
+  }
+  
+  
+  

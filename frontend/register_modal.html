@@ -1,0 +1,79 @@
+<style>
+    /* توحيد اتجاه الكتابة لليمين */
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      direction: rtl;
+      text-align: right;
+    }
+  </style>
+  
+ <!-- Modal إنشاء حساب -->
+<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+  
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="registerModalLabel">إنشاء حساب جديد</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+        </div>
+  
+        <div class="modal-body">
+          <!-- الخطوة الأولى: اختيار النوع -->
+          <div id="step1" class="text-center">
+            <div class="mb-4">
+              <p class="mb-4">اختر نوع الحساب:</p>
+  
+              <button class="btn btn-outline-primary w-100 rounded-4 mb-3 py-3" id="chooseMarketer">
+                📢 مسوق
+              </button>
+  
+              <button class="btn btn-outline-success w-100 rounded-4 py-3" id="chooseMerchant">
+                🛒 بائع
+              </button>
+            </div>
+          </div>
+  
+          <!-- الخطوة الثانية: بيانات المستخدم -->
+          <div id="step2" style="display: none;">
+            <form id="registerForm">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control rounded-4" id="fullName" placeholder="الاسم الكامل" required>
+                <label for="fullName">👤 الاسم الكامل</label>
+              </div>
+  
+              <div class="form-floating mb-3">
+                <input type="email" class="form-control rounded-4" id="email" placeholder="name@example.com" required>
+                <label for="email">📧 البريد الإلكتروني</label>
+              </div>
+  
+              <div class="form-floating mb-3">
+                <input type="password" class="form-control rounded-4" id="password" placeholder="كلمة المرور" required>
+                <label for="password">🔑 كلمة المرور</label>
+              </div>
+  
+              <div class="form-floating mb-3">
+                <input type="password" class="form-control rounded-4" id="confirmPassword" placeholder="تأكيد كلمة المرور" required>
+                <label for="confirmPassword">🔑 تأكيد كلمة المرور</label>
+              </div>
+  
+              <!-- حقل اسم المتجر يظهر فقط لو كان النوع تاجر -->
+              <div class="form-floating mb-3" id="storeNameField" style="display: none;">
+                <input type="text" class="form-control rounded-4" id="storeName" placeholder="اسم المتجر">
+                <label for="storeName">🏪 اسم المتجر</label>
+              </div>
+  
+              <button type="submit" class="btn btn-success w-100 rounded-4">إنشاء الحساب</button>
+            </form>
+  
+            <!-- زر العودة للخطوة 1 -->
+            <button id="backToStep1" class="btn btn-outline-secondary w-100 rounded-4 mt-3">رجوع إلى الخطوة 1</button>
+          </div>
+  
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  
+  

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>اتصل بنا - Bey3li</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+ 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+
+
+  <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+  <!-- النافبار -->
+  <div id="navbar"></div>
+
+
+  <div id="modalloginContent"></div>
+
+  <!-- هنا سيتم تحميل المودال -->
+  <div id="modalContent"></div>
+
+<!-- محتوى اتصل بنا -->
+<section class="container my-5">
+    <div class="row">
+      <div class="col-md-8 mx-auto">
+        <div class="contact-card text-center p-5">
+          <h1 class="mb-4">اتصل بنا</h1>
+          <p class="lead">
+            مرحباً بك في <strong>Bey3li</strong>، الموقع الوسيط بين التجار والمسوقين.  
+            نحن نسعى لتوفير فرص عمل مميزة وفرص بيع رائعة، مع تقديم تجربة تصفح جميلة ومريحة للمنتجات المتنوعة.
+          </p>
+          <p class="lead">
+            فريقنا يعمل باستمرار على تحسين الخدمات وتقديم أفضل الحلول لكل من البائعين والمسوقين لضمان نجاحكم وزيادة مبيعاتكم.
+          </p>
+  
+          <div class="my-4">
+            <h4>معلومات التواصل</h4>
+            <ul class="list-unstyled text-start">
+              <li><i class="bi bi-geo-alt-fill"></i> العنوان: الجزائر العاصمة، شارع ديدوش مراد</li>
+              <li><i class="bi bi-envelope-fill"></i> البريد الإلكتروني: Support@bey3li.com</li>
+              <li><i class="bi bi-telephone-fill"></i> الهاتف: +213 555 123 456</li>
+              <li><i class="bi bi-globe"></i> الموقع الإلكتروني: <a href="https://bey3li.com" target="_blank">bey3li.com</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- زر إرسال رسالة -->
+  <button id="openFormButton" class="btn-floating">📩 إرسال رسالة</button>
+  
+  <!-- نموذج الإرسال (مخفي في البداية) -->
+  <div id="messageForm" class="form-popup">
+    <form class="form-container">
+      <h4 class="mb-3">أرسل لنا رسالة</h4>
+  
+      <div class="mb-3">
+        <input type="text" class="form-control" placeholder="اسمك الكامل" required>
+      </div>
+  
+      <div class="mb-3">
+        <input type="email" class="form-control" placeholder="بريدك الإلكتروني" required>
+      </div>
+  
+      <div class="mb-3">
+        <textarea class="form-control" placeholder="رسالتك..." rows="4" required></textarea>
+      </div>
+  
+      <button type="submit" class="btn btn-success w-100 mb-2">إرسال</button>
+      <button type="button" id="closeFormButton" class="btn btn-secondary w-100">إغلاق</button>
+    </form>
+  </div>
+
+  <!-- زر واتساب عائم -->
+<a href="https://wa.me/213698341539" class="whatsapp-float" target="_blank">
+    <i class="bi bi-whatsapp"></i>
+  </a>
+  
+  
+  <!-- إضافة جافاسكريبت للتحكم -->
+  <script>
+    const openFormButton = document.getElementById('openFormButton');
+    const closeFormButton = document.getElementById('closeFormButton');
+    const messageForm = document.getElementById('messageForm');
+  
+    // فتح الفورم عند الضغط على الزر
+    openFormButton.addEventListener('click', () => {
+      messageForm.style.display = 'block';
+    });
+  
+    // غلق الفورم عند الضغط على زر الإغلاق
+    closeFormButton.addEventListener('click', () => {
+      messageForm.style.display = 'none';
+    });
+  
+    // غلق الفورم عند الضغط خارج الفورم
+    document.addEventListener('click', (event) => {
+      if (messageForm.style.display === 'block' && !messageForm.contains(event.target) && event.target !== openFormButton) {
+        messageForm.style.display = 'none';
+      }
+    });
+
+    const whatsappButton = document.querySelector('.whatsapp-float');
+
+setInterval(() => {
+  whatsappButton.classList.add('shake');
+  setTimeout(() => {
+    whatsappButton.classList.remove('shake');
+  }, 800); // مدة الاهتزاز 0.8 ثانية
+}, 5000); // كل 20 ثانية
+
+  </script>
+  
+  
+  
+
+  <!-- الفوتر -->
+  <div id="footer"></div>
+
+
+
+  <script>
+
+    // تحميل النافبار
+    fetch('navbar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('navbar').innerHTML = data;
+      });
+    
+    
+      fetch('footer.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('footer').innerHTML = data;
+        });
+    </script>
+
+
+<script src="js/main.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

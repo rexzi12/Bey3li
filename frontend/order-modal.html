@@ -1,0 +1,95 @@
+<!-- Modal الطلب المحسّن -->
+<div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+  
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="orderModalLabel">تفاصيل الطلب</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+        </div>
+  
+        <div class="modal-body bg-light">
+          <div class="col-lg-12">
+            <div class="card shadow-sm border-0">
+              <div class="card-body">
+                
+                <h4 class="card-title mb-4 text-primary">معلومات الطلب</h4>
+  
+                <ul class="list-unstyled">
+                  <li class="d-flex justify-content-between align-items-center mb-2">
+                    <span><i class="bi bi-box"></i> سعر المنتج:</span>
+                    <span id="base-price" class="fw-bold">0 دج</span>
+                  </li>
+                  <li class="d-flex justify-content-between align-items-center mb-2">
+                    <span><i class="bi bi-truck"></i> تكلفة الشحن:</span>
+                    <span id="shipping-cost" class="text-muted">اختر الولاية</span>
+                  </li>
+                </ul>
+  
+                <hr>
+  
+                <div class="d-flex justify-content-between fw-bold mb-4 fs-5">
+                  <span>الإجمالي:</span>
+                  <span id="total-cost" class="text-success">0 دج</span>
+                </div>
+  
+                <div id="alert-container"></div>
+  
+                <button class="btn btn-outline-primary w-100 mb-3" id="toggle-form-btn">
+                  <i class="bi bi-pencil-square"></i> إتمام الطلب
+                </button>
+  
+                <div id="order-form-container" style="display: none; animation: fadeIn 0.5s;">
+                  <h5 class="mb-3 text-primary">تفاصيل العميل</h5>
+  
+                  <form id="order-form" novalidate>
+                    <div class="mb-3">
+                      <label for="full-name" class="form-label">الاسم الكامل</label>
+                      <input type="text" class="form-control" id="full-name" required>
+                      <div class="invalid-feedback">الرجاء إدخال اسمك الكامل.</div>
+                    </div>
+  
+                    <div class="mb-3">
+                      <label for="phone-number" class="form-label">رقم الهاتف</label>
+                      <input type="tel" class="form-control" id="phone-number" required>
+                      <div class="invalid-feedback">الرجاء إدخال رقم هاتف صحيح.</div>
+                    </div>
+  
+                    <div class="mb-3">
+                      <label for="state" class="form-label">الولاية</label>
+                      <select class="form-select" id="state" required>
+                        <option value="">اختر الولاية</option>
+                      </select>
+                      <div class="invalid-feedback">الرجاء اختيار ولايتك.</div>
+                    </div>
+  
+                    <div class="mb-3">
+                      <label for="address" class="form-label">العنوان</label>
+                      <input type="text" class="form-control" id="address" required>
+                      <div class="invalid-feedback">الرجاء إدخال عنوانك بالتفصيل.</div>
+                    </div>
+  
+                    <button type="submit" class="btn btn-success w-100">
+                      <span id="submit-text">تأكيد الطلب</span>
+                      <span id="submit-loader" class="spinner-border spinner-border-sm d-none"></span>
+                    </button>
+                  </form>
+                </div>
+  
+              </div>
+            </div>
+          </div>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  
+  <!-- CSS Animations -->
+  <style>
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  </style>
+  

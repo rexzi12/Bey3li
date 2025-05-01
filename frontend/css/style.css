@@ -1,0 +1,454 @@
+/* File: css/style.css */
+
+/* تنسيق عام */
+body {
+  font-family: 'Tajawal', sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+}
+
+/* الشعار */
+.logo-img {
+  height: 70px;  /* تقليل حجم الشعار لتناسب الشاشات الصغيرة */
+  display: block;
+  margin: 0 auto;  /* محاذاة الشعار في المنتصف */
+}
+
+/* شريط التنقل */
+.navbar {
+  padding: 1rem 0;
+  text-align: center;  /* محاذاة العناصر في المنتصف */
+}
+
+/* الروابط في الشريط */
+.navbar .nav-link {
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s;
+  display: inline-block;
+  margin: 0 10px;  /* ترك مسافة بين الروابط */
+}
+
+.navbar .nav-link:hover {
+  color: #28a745;
+}
+
+/* الزر الخاص بإضافة التصنيفات */
+#newCategoriesButton {
+  background-color: #28a745;
+  border: none;
+  font-weight: 600;
+  padding: 10px 20px;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;  /* إضافة حواف دائرية */
+}
+
+/* التنقل المنسدل */
+.animated-dropdown {
+  animation: fadeInDown 0.4s ease both;
+}
+
+/* حركة الانزلاق */
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* وسائل الإعلام للأجهزة الصغيرة */
+@media (max-width: 768px) {
+  /* تقليل حجم النصوص للروابط في التنقل */
+  .navbar .nav-link {
+    font-size: 14px;
+    margin: 0 5px;
+  }
+
+  /* ضبط الزر ليكون ملائم للشاشة الصغيرة */
+  #newCategoriesButton {
+    width: 100%;  /* جعل الزر يعرض بالكامل */
+    padding: 12px;
+    font-size: 16px;  /* زيادة حجم الخط */
+  }
+
+  /* تصغير الشعار */
+  .logo-img {
+    height: 50px;
+  }
+
+  /* جعل العناصر في شريط التنقل تظهر في سطر واحد عند الشاشات الصغيرة */
+  .navbar {
+    display: block;
+  }
+}
+
+
+.hero {
+  margin-top: 20px;
+}
+
+.img-fixed {
+  height: 400px;
+  object-fit: cover;
+}
+
+.carousel-caption {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 1rem;
+  border-radius: 12px;
+}
+
+.product-card {
+  transition: transform 0.3s, box-shadow 0.3s;
+  border: none;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-card img {
+  height: 250px;
+  object-fit: cover;
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.btn-outline-primary {
+  color: #28a745;
+  border-color: #28a745;
+}
+
+.btn-outline-primary:hover {
+  background-color: #28a745;
+  color: #fff;
+  border-color: #28a745;
+}
+
+/* زر Dropdown بتدرج أخضر ونبض خفيف عند الفتح */
+#loginDropdown-animated {
+  background: linear-gradient(135deg, #28a745 0%, #218838 100%);
+  border: none;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+  transition: all 0.3s ease;
+}
+
+#loginDropdown-animated:hover,
+#loginDropdown-animated:focus,
+.show > #loginDropdown-animated { /* عندما القائمة مفتوحة */
+  animation: pulse 1.5s infinite;
+  background: linear-gradient(135deg, #218838 0%, #1e7e34 100%);
+  box-shadow: 0 6px 18px rgba(40, 167, 69, 0.5);
+  transform: translateY(-2px);
+}
+
+/* القائمة المنسدلة بخلفية متدرجة */
+.dropdown-menu {
+  background: linear-gradient(135deg, #e6f4ea 0%, #d4ede1 100%);
+  border: none;
+  border-radius: 15px;
+  padding: 0.8rem;
+  animation: dropdownFadeSlide 0.4s ease both;
+  transform-origin: top center;
+}
+
+/* تأثير نبض */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* حركة فتح القائمة */
+@keyframes dropdownFadeSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* تحسين عناصر القائمة */
+.dropdown-item {
+  color: #333;
+  font-weight: 500;
+  transition: background-color 0.3s;
+  border-radius: 10px;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(40, 167, 69, 0.15);
+}
+
+
+/* حركة نبض */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* حركة فتح القائمة */
+@keyframes dropdownFadeSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+
+footer {
+  background-color: #000000;
+  padding: 2rem 0;
+  border-top: 1px solid #ddd;
+}
+
+footer h5 {
+  color: #28a745;
+  margin-bottom: 1rem;
+}
+
+footer p, footer a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+footer a:hover {
+  color: #28a745;
+}
+
+.social-icons a {
+  font-size: 1.5rem;
+  margin: 0 0.5rem;
+  color: #555;
+  transition: color 0.3s;
+}
+
+.social-icons a:hover {
+  color: #28a745;
+}
+
+.dropdown-menu {
+  border-radius: 12px;
+  padding: 0.5rem;
+}
+
+.badge {
+  font-size: 0.7rem;
+}
+
+input[type="search"] {
+  border-radius: 25px;
+  padding-right: 1rem;
+}
+
+.btn-dark {
+  background-color: #28a745;
+  border: none;
+}
+
+.btn-dark:hover {
+  background-color: #218838;
+}
+
+.dropdown-item:hover {
+  background-color: #f1f1f1;
+}
+
+
+  .fade-in {
+    animation: fadeIn 0.3s forwards;
+  }
+
+  .fade-out {
+    animation: fadeOut 0.3s forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeOut {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(10px); }
+  }
+
+/* Responsive Tweaks */
+@media (max-width: 768px) {
+  .img-fixed {
+    height: 250px;
+  }
+  .carousel-caption {
+    font-size: 0.9rem;
+  }
+  .product-card img {
+    height: 200px;
+  }
+}
+
+
+  /* تصميم البطاقة */
+  .contact-card {
+    background: #cfcfcf;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    padding: 40px;
+    transition: all 0.3s ease;
+  }
+  .contact-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+  }
+  
+  /* زر عائم مع حركة طفو */
+.btn-floating {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: linear-gradient(45deg, #28a745, #218838);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 12px 20px;
+  font-size: 18px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  z-index: 999;
+  transition: all 0.3s ease;
+  animation: float 2s ease-in-out infinite;
+}
+
+/* حركة الطفو */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* تأثير عند مرور الماوس */
+.btn-floating:hover {
+  background: linear-gradient(45deg, #218838, #1e7e34);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.4);
+}
+
+/* زر واتساب عائم */
+.whatsapp-float {
+  position: fixed;
+  bottom: 20px;
+  left: 20px; /* يسار */
+  background: #25d366; /* لون واتساب */
+  color: white;
+  border-radius: 50%;
+  padding: 10px;
+  font-size: 30px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  z-index: 999;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.whatsapp-float:hover {
+  background: #128c7e;
+}
+
+@keyframes shake {
+  0% { transform: translate(1px, 1px) rotate(0deg); }
+  10% { transform: translate(-1px, -2px) rotate(-1deg); }
+  20% { transform: translate(-3px, 0px) rotate(1deg); }
+  30% { transform: translate(3px, 2px) rotate(0deg); }
+  40% { transform: translate(1px, -1px) rotate(1deg); }
+  50% { transform: translate(-1px, 2px) rotate(-1deg); }
+  60% { transform: translate(-3px, 1px) rotate(0deg); }
+  70% { transform: translate(3px, 1px) rotate(-1deg); }
+  80% { transform: translate(-1px, -1px) rotate(1deg); }
+  90% { transform: translate(1px, 2px) rotate(0deg); }
+  100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+/* كلاس الاهتزاز */
+.shake {
+  animation: shake 0.8s;
+}
+
+
+  /* نموذج الإرسال */
+  .form-popup {
+    display: none;
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    border: 1px solid #ddd;
+    z-index: 1000;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    border-radius: 15px;
+    width: 300px;
+    animation: fadeIn 0.4s;
+  }
+  @keyframes fadeIn {
+    from {opacity: 0; transform: translateY(20px);}
+    to {opacity: 1; transform: translateY(0);}
+  }
+  .form-container input,
+  .form-container textarea {
+    border-radius: 10px;
+    border: 1px solid #ccc;
+  }
+
+
+  .cart-item {
+    border-bottom: 1px solid #ddd;
+    padding: 15px 0;
+  }
+  .cart-summary {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+  }
+
+
+  #searchResults {
+    max-height: 300px;
+    overflow-y: auto;
+    background: white;
+    border-top: none;
+  }
+  #searchResults .list-group-item {
+    cursor: pointer;
+  }
+  #searchResults img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    margin-right: 10px;
+  }

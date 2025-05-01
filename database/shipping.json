@@ -1,0 +1,21 @@
+{
+    "states": [
+      {
+        "name": "الجزائر",
+        "shippingCost": 500
+      },
+      {
+        "name": "وهران",
+        "shippingCost": 600
+      },
+      {
+        "name": "قسنطينة",
+        "shippingCost": 700
+      },
+      {
+        "name": "باتنة",
+        "shippingCost": 800
+      }
+    ]
+  }
+  

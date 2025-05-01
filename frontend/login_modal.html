@@ -1,0 +1,50 @@
+<!-- تحميل Animate.css لتحسين الحركات -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+<!-- Modal تسجيل الدخول بتصميم مطور -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow-lg border-0 animate__animated animate__fadeInDown">
+
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="loginModalLabel">🔒 تسجيل الدخول</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+      </div>
+
+      <div class="modal-body p-4">
+        <form id="loginForm" novalidate>
+
+            <div class="form-floating mb-3">
+                <input type="email" id="loginEmail" class="form-control rounded-4" placeholder="name@example.com" dir="rtl" required>
+                <label for="loginEmail">📧 البريد الإلكتروني</label>
+              </div>
+              
+              <div class="form-floating mb-4">
+                <input type="password" id="loginPassword" class="form-control rounded-4" placeholder="Password" dir="rtl" required>
+                <label for="loginPassword">🔑 كلمة المرور</label>
+              </div>
+              
+
+          <button type="submit" class="btn btn-primary w-100 rounded-4 py-2 fw-bold">
+            تسجيل الدخول
+          </button>
+
+          <div class="text-center mt-3">
+            <a href="#" class="small text-muted">هل نسيت كلمة المرور؟</a>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+    input[type="email"] {
+      direction: rtl; /* اجبر اتجاه الكتابة من اليمين */
+      text-align: right; /* و اجعل النص يظهر من جهة اليمين */
+    }
+  </style>
+  
+  
